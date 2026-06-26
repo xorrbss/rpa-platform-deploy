@@ -1,0 +1,40 @@
+name: Staging Approval Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_packet_alias:
+        description: Redacted release packet alias
+        required: true
+        default: "[staging-release-packet-1]"
+      deploy_target_alias:
+        description: Redacted deploy target alias
+        required: true
+        default: "[deploy-target-gh-actions-staging-1]"
+      rollback_alias:
+        description: Redacted rollback evidence alias
+        required: true
+        default: "[rollback-plan-1]"
+      provisioning_alias:
+        description: Redacted provisioning inventory alias
+        required: true
+        default: "[secretref-inventory-1]"
+
+permissions:
+  contents: read
+
+jobs:
+  approval:
+    name: Environment approval boundary
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Record redacted approval aliases
+        shell: bash
+        run: |
+          echo "environment=staging"
+          echo "release_packet_alias=${{ inputs.release_packet_alias }}"
+          echo "deploy_target_alias=${{ inputs.deploy_target_alias }}"
+          echo "rollback_alias=${{ inputs.rollback_alias }}"
+          echo "provisioning_alias=${{ inputs.provisioning_alias }}"
+          echo "secret_material=omitted"
